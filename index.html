@@ -1,0 +1,290 @@
+<!doctype html>
+<html lang="en">  
+<head>  
+<meta charset="utf-8" />  
+<meta name="viewport" content="width=device-width,initial-scale=1" />  
+<title>TEAM EARNING — premium UI</title>  
+<style>  
+  :root{  
+    --card-w: 170px;  
+    --radius: 12px;  
+    --stroke: 6px;  
+    --bg: #050505;  
+    --neon: #00ffd9;  
+  }  
+  *{box-sizing:border-box}  
+  body{  
+    height:100vh;  
+    margin:0;  
+    display:flex;  
+    align-items:center;  
+    justify-content:center;  
+    background: linear-gradient(180deg,#232323 0%, #131313 100%);  
+    font-family: "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;  
+  }  
+  .card-wrap{  
+    width:var(--card-w);  
+    position:relative;  
+    border-radius: calc(var(--radius) + var(--stroke));  
+    padding:8px;  
+    filter: drop-shadow(0 6px 18px rgba(0,0,0,0.6));  
+  }  
+  .card-wrap::before{  
+    content:"";  
+    position:absolute;  
+    inset:0;  
+    border-radius: calc(var(--radius) + var(--stroke));  
+    padding: var(--stroke);  
+    background: linear-gradient(90deg,  
+      #ff4d4d, #ffa64d, #ffee4d, #8bff4d, #4dffeb, #4db8ff, #b84dff, #ff4db8, #ff4d4d);  
+    -webkit-mask:  
+      linear-gradient(#000 0 0) content-box,  
+      linear-gradient(#000 0 0);  
+    -webkit-mask-composite: xor;  
+            mask-composite: exclude;  
+    pointer-events:none;  
+  }  
+  .card{  
+    position:relative;  
+    border-radius: var(--radius);  
+    background: radial-gradient(circle at 50% 5%, rgba(0,255,217,0.03), transparent 18%),  
+                linear-gradient(180deg,#000 0%, #050505 100%);  
+    padding:10px 12px;  
+    color:#e9f6f3;  
+    overflow:hidden;  
+  }  
+  .card::after{  
+    content:"";  
+    position:absolute;  
+    inset:0;  
+    border-radius: inherit;  
+    box-shadow: inset 0 10px 28px rgba(0,255,217,0.03), inset 0 -6px 20px rgba(0,0,0,0.6);  
+    pointer-events:none;  
+  }  
+  .title{  
+    font-size:16px;  
+    letter-spacing:1px;  
+    margin:2px 0 6px 0;  
+    text-transform: uppercase;  
+    font-weight:800;  
+    display:flex;  
+    align-items:center;  
+    justify-content:center;  
+    background: linear-gradient(90deg, #00ffd9, #4db8ff, #ff4d4d, #ffd84d);  
+    -webkit-background-clip: text;  
+    background-clip: text;  
+    color: transparent;  
+    animation: gradMove 3.4s linear infinite;  
+    text-shadow:0 0 8px rgba(0,255,217,0.12);  
+  }  
+  @keyframes gradMove{  
+    0% { background-position: 0% 50%; }  
+    50% { background-position: 100% 50%; }  
+    100% { background-position: 0% 50%; }  
+  }  
+  .server-row{  
+    display:flex;  
+    align-items:center;  
+    justify-content:space-between;  
+    margin-bottom:6px;  
+  }  
+  .server-left{  
+    font-size:13px;  
+    font-weight:700;  
+    color:#cfcfcf;  
+  }  
+  .android-dot{  
+    width:18px;height:18px;border-radius:4px;  
+    background: linear-gradient(180deg,#2cd05f,#199a36);  
+    box-shadow:0 0 8px rgba(25,154,54,0.28);  
+    display:inline-block;  
+    animation: pulse 1.8s ease-in-out infinite;  
+  }  
+  @keyframes pulse{  
+    0%{transform:scale(1); opacity:1}  
+    50%{transform:scale(1.07); opacity:0.85}  
+    100%{transform:scale(1); opacity:1}  
+  }  
+  .online-text{ font-weight:700; color:#36b64a; font-size:13px; }  
+  .sep{  
+    height:3px;  
+    border-radius:2px;  
+    background:linear-gradient(90deg,#ff884d,#ffee4d,#4dffeb,#b84dff);  
+    background-size:200% 100%;  
+    animation: slide 3.2s linear infinite;  
+    margin:8px 0;  
+  }  
+  .sep.alt{  
+    background:linear-gradient(90deg,#ffee4d,#4dffeb,#ff4db8,#4db8ff);  
+    animation-direction:reverse;  
+  }  
+  @keyframes slide{  
+    0%{background-position:0% 50%}  
+    50%{background-position:100% 50%}  
+    100%{background-position:0% 50%}  
+  }  
+  .period{  
+    text-align:center;  
+    color:#dcdcdc;  
+    font-weight:800;  
+    font-size:14px;  
+    display:flex;  
+    align-items:center;  
+    justify-content:center;  
+    gap:6px;  
+  }  
+  .period .num{ color: #ffd84d; min-width:40px; text-align:center; }  
+  .bottom{  
+    display:flex;  
+    justify-content:space-between;  
+    align-items:center;  
+    margin-top:8px;  
+  }  
+  .wingo{ color:#36f0df; font-weight:800; font-size:13px; }  
+  .min{ color:#ffd84d; font-weight:900; font-size:14px; margin-top:4px; }  
+  .big-text{  
+    font-weight:900;  
+    text-align:center;  
+    display:inline-block;  
+    animation: bounce 1.6s ease-in-out infinite;  
+  }  
+  @keyframes bounce{  
+    0%{transform:translateY(0)}  
+    50%{transform:translateY(-6px)}  
+    100%{transform:translateY(0)}  
+  }  
+  .zoomIn{  
+    animation: zoomIn 0.6s ease forwards;  
+  }  
+  @keyframes zoomIn{  
+    0%{transform:scale(0.4); opacity:0}  
+    100%{transform:scale(1); opacity:1}  
+  }  
+  .loader {  
+    width:60px;  
+    height:20px;  
+    border-radius:8px;  
+    background: linear-gradient(90deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02));  
+    overflow:hidden;  
+    position:relative;  
+  }  
+  .loader::after{  
+    content:"";  
+    position:absolute;  
+    top:0;left:-30%;  
+    width:30%;height:100%;  
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.15), transparent);  
+    animation: loaderMove 1s linear infinite;  
+  }  
+  @keyframes loaderMove{0%{left:-30%}100%{left:130%}}  
+  .big-mode{  
+    background: linear-gradient(180deg,#ff4d4d,#ffffff);  
+    -webkit-background-clip: text;  
+    background-clip: text;  
+    color:transparent;  
+    font-size:24px;  
+    text-shadow:0 6px 18px rgba(255,77,77,0.12);  
+  }  
+  .small-mode{  
+    background: linear-gradient(180deg,#36f0df,#ffffff);  
+    -webkit-background-clip: text;  
+    background-clip: text;  
+    color:transparent;  
+    font-size:22px;  
+    text-shadow:0 6px 16px rgba(54,240,223,0.08);  
+  }  
+</style>  
+</head>  
+<body>  
+  <div class="card-wrap">  
+    <div class="card">  
+      <div class="title">TEAM EARNING</div>  
+      <div class="server-row">  
+        <div class="server-left">Server :</div>  
+        <div style="display:flex;align-items:center;gap:6px;">  
+          <span class="android-dot"></span>  
+          <span class="online-text">Online</span>  
+        </div>  
+      </div>  
+      <div class="sep"></div>  
+      <div class="period">Period - <span class="num" id="periodNum">000</span></div>  
+      <div class="sep alt"></div>  
+      <div class="bottom">  
+        <div>  
+          <div class="wingo">Wingo</div>  
+          <div class="min">1 Min -</div>  
+        </div>  
+        <div id="resultArea">  
+          <div class="loader"></div>  
+        </div>  
+      </div>  
+    </div>  
+  </div>  
+
+<script>  
+function getISTParts() {  
+  const fmt = new Intl.DateTimeFormat('en-GB', {  
+    timeZone: 'Asia/Kolkata',  
+    hour12: false,  
+    year: 'numeric', month: '2-digit', day: '2-digit',  
+    hour: '2-digit', minute: '2-digit'  
+  });  
+  const parts = {};  
+  for (const p of fmt.formatToParts(new Date())) {  
+    if (p.type !== 'literal') parts[p.type] = p.value;  
+  }  
+  return parts;  
+}  
+
+function computeFullPeriodFromIST(parts) {  
+  const yyyyMMdd = parts.year + parts.month + parts.day;  
+  const hour = parseInt(parts.hour,10);  
+  const minute = parseInt(parts.minute,10);  
+  const totalMinutes = hour * 60 + minute;  
+  return yyyyMMdd + '1000' + String(10001 + totalMinutes - 330);  
+}  
+
+const periodEl = document.getElementById('periodNum');  
+const resultArea = document.getElementById('resultArea');  
+let lastFullPeriod = null;  
+let loaderTimeout = null;  
+
+function showLoaderThenResult(newFullPeriod) {  
+  const last3 = newFullPeriod.slice(-3);  
+  periodEl.textContent = last3;  
+
+  resultArea.innerHTML = `<div class="loader"></div>`;  
+  if (loaderTimeout) clearTimeout(loaderTimeout);  
+
+  loaderTimeout = setTimeout(() => {  
+    const isBig = Math.random() < 0.5;  
+    const text = isBig ? "BIG" : "SMALL";  
+    resultArea.innerHTML = `<div class="big-text ${isBig ? 'big-mode' : 'small-mode'} zoomIn">${text}</div>`;  
+  }, 3000);  
+}  
+
+function updateEverySecond() {  
+  const parts = getISTParts();  
+  const full = computeFullPeriodFromIST(parts);  
+  if (full !== lastFullPeriod) {  
+    lastFullPeriod = full;  
+    showLoaderThenResult(full);  
+  }  
+}  
+
+(function init() {  
+  const p = getISTParts();  
+  const full = computeFullPeriodFromIST(p);  
+  lastFullPeriod = full;  
+  periodEl.textContent = full.slice(-3);  
+  resultArea.innerHTML = `<div class="loader"></div>`;  
+  setTimeout(() => {  
+    const isBig = Math.random() < 0.5;  
+    const text = isBig ? "BIG" : "SMALL";  
+    resultArea.innerHTML = `<div class="big-text ${isBig ? 'big-mode' : 'small-mode'} zoomIn">${text}</div>`;  
+  }, 3000);  
+  setInterval(updateEverySecond, 1000);  
+})();  
+</script>  
+</body>  
+</html>
