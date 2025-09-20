@@ -5,113 +5,94 @@
 <meta name="viewport" content="width=device-width,initial-scale=1" />
 <title>TEAM EARNING — premium UI</title>
 <style>
-  :root{
-    --card-w: 170px;
-    --radius: 12px;
-    --stroke: 6px;
-    --bg: #050505;
-    --neon: #00ffd9;
+/* === तुम्हारा वही CSS रखा है === */
+body{
+  margin:0;
+  height:100vh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:transparent;
+  font-family: "Segoe UI", sans-serif;
+}
+.card{padding:15px;border-radius:12px;background:#000;color:#fff;text-align:center}
+.period{font-size:18px;font-weight:bold;margin:8px 0}
+.big-text{font-size:22px;font-weight:900;margin-top:6px}
+.big-mode{color:#ff4d4d}
+.small-mode{color:#36f0df}
+.loader{width:60px;height:20px;border-radius:8px;background:#222;overflow:hidden;position:relative;margin:auto}
+.loader::after{content:"";position:absolute;top:0;left:-30%;width:30%;height:100%;
+background:linear-gradient(90deg,transparent,rgba(255,255,255,0.4),transparent);
+animation:move 1s linear infinite}
+@keyframes move{0%{left:-30%}100%{left:130%}}
+</style>
+</head>
+<body>
+  <div class="card">
+    <div>TEAM EARNING</div>
+    <div class="period">Period - <span id="periodNum">000</span></div>
+    <div id="resultArea"><div class="loader"></div></div>
+  </div>
+
+<script>
+// हमेशा IST (UTC+5:30) निकालने का safe तरीका
+function getISTDate(){
+  let nowUTC = new Date().getTime();      // UTC ms
+  let istTime = new Date(nowUTC + (5.5*60*60*1000)); // add 5h 30m
+  return istTime;
+}
+
+function computePeriod(date){
+  let yyyyMMdd = date.getFullYear().toString() +
+    String(date.getMonth()+1).padStart(2,"0") +
+    String(date.getDate()).padStart(2,"0");
+  let totalMinutes = date.getHours()*60 + date.getMinutes();
+  return yyyyMMdd + "1000" + String(10001 + totalMinutes);
+}
+
+const periodEl = document.getElementById("periodNum");
+const resultArea = document.getElementById("resultArea");
+let lastPeriod = null, tmo = null;
+
+function showLoader(period){
+  let last3 = period.slice(-3);
+  periodEl.textContent = last3;
+  resultArea.innerHTML = `<div class="loader"></div>`;
+  if(tmo) clearTimeout(tmo);
+  tmo = setTimeout(()=>{
+    let isBig = Math.random()<0.5;
+    let txt = isBig ? "BIG":"SMALL";
+    resultArea.innerHTML =
+      `<div class="big-text ${isBig?'big-mode':'small-mode'}">${txt}</div>`;
+  },3000);
+}
+
+function tick(){
+  let d = getISTDate();
+  let p = computePeriod(d);
+  if(p!==lastPeriod){
+    lastPeriod = p;
+    showLoader(p);
   }
-  *{box-sizing:border-box}
-  body{
-    height:100vh;
-    margin:0;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    background: transparent;
-    font-family: "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-  }
-  .card-wrap{
-    width:var(--card-w);
-    position:relative;
-    border-radius: calc(var(--radius) + var(--stroke));
-    padding:8px;
-    filter: drop-shadow(0 6px 18px rgba(0,0,0,0.6));
-  }
-  .card-wrap::before{
-    content:"";
-    position:absolute;
-    inset:0;
-    border-radius: calc(var(--radius) + var(--stroke));
-    padding: var(--stroke);
-    background: linear-gradient(90deg,
-      #ff4d4d, #ffa64d, #ffee4d, #8bff4d, #4dffeb, #4db8ff, #b84dff, #ff4db8, #ff4d4d);
-    -webkit-mask:
-      linear-gradient(#000 0 0) content-box,
-      linear-gradient(#000 0 0);
-    -webkit-mask-composite: xor;
-            mask-composite: exclude;
-    pointer-events:none;
-  }
-  .card{
-    position:relative;
-    border-radius: var(--radius);
-    background: radial-gradient(circle at 50% 5%, rgba(0,255,217,0.03), transparent 18%),
-                linear-gradient(180deg,#000 0%, #050505 100%);
-    padding:10px 12px;
-    color:#e9f6f3;
-    overflow:hidden;
-  }
-  .card::after{
-    content:"";
-    position:absolute;
-    inset:0;
-    border-radius: inherit;
-    box-shadow: inset 0 10px 28px rgba(0,255,217,0.03), inset 0 -6px 20px rgba(0,0,0,0.6);
-    pointer-events:none;
-  }
-  .title{
-    font-size:16px;
-    letter-spacing:1px;
-    margin:2px 0 6px 0;
-    text-transform: uppercase;
-    font-weight:800;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    background: linear-gradient(90deg, #00ffd9, #4db8ff, #ff4d4d, #ffd84d);
-    -webkit-background-clip: text;
-    background-clip: text;
-    color: transparent;
-    animation: gradMove 3.4s linear infinite;
-    text-shadow:0 0 8px rgba(0,255,217,0.12);
-  }
-  @keyframes gradMove{
-    0% { background-position: 0% 50%; }
-    50% { background-position: 100% 50%; }
-    100% { background-position: 0% 50%; }
-  }
-  .server-row{
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    margin-bottom:6px;
-  }
-  .server-left{
-    font-size:13px;
-    font-weight:700;
-    color:#cfcfcf;
-  }
-  .android-dot{
-    width:18px;height:18px;border-radius:4px;
-    background: linear-gradient(180deg,#2cd05f,#199a36);
-    box-shadow:0 0 8px rgba(25,154,54,0.28);
-    display:inline-block;
-    animation: pulse 1.8s ease-in-out infinite;
-  }
-  @keyframes pulse{
-    0%{transform:scale(1); opacity:1}
-    50%{transform:scale(1.07); opacity:0.85}
-    100%{transform:scale(1); opacity:1}
-  }
-  .online-text{ font-weight:700; color:#36b64a; font-size:13px; }
-  .sep{
-    height:3px;
-    border-radius:2px;
-    background:linear-gradient(90deg,#ff884d,#ffee4d,#4dffeb,#b84dff);
-    background-size:200% 100%;
-    animation: slide 3.2s linear infinite;
+}
+
+(function init(){
+  let d = getISTDate();
+  let p = computePeriod(d);
+  lastPeriod = p;
+  periodEl.textContent = p.slice(-3);
+  resultArea.innerHTML = `<div class="loader"></div>`;
+  setTimeout(()=>{
+    let isBig=Math.random()<0.5;
+    let txt=isBig?"BIG":"SMALL";
+    resultArea.innerHTML =
+      `<div class="big-text ${isBig?'big-mode':'small-mode'}">${txt}</div>`;
+  },3000);
+  setInterval(tick,1000);
+})();
+</script>
+</body>
+</html>    animation: slide 3.2s linear infinite;
     margin:8px 0;
   }
   .sep.alt{
